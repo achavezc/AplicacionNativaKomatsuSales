@@ -38,13 +38,16 @@ import upc.edu.pe.app_komatsusales.model.Usuario;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "";
+    private static final String TAG = "::::: " +LoginActivity.class;
     private static String LOGIN_URL = "http://52.88.24.228/ServiciosKomatsuSales/Service1.svc/Login";
 
     Util util = new Util();
     Personal personal = new Personal();
     TextView quoteTextView;
     Button btnLogin ,  btnCancel;
+    public String nombre;
+
+    Boolean dValidator = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-
 
         btnLogin  = (Button) findViewById(R.id.btnLogin);
         btnCancel = (Button) findViewById(R.id.btnCancel);
@@ -73,16 +75,14 @@ public class LoginActivity extends AppCompatActivity {
             quoteTextView = (TextView) findViewById(R.id.quotetextview);
 
             Usuario usuario = new Usuario(user.toString(), pass.toString());
-            RestLogin(LOGIN_URL, usuario);
-                System.out.println(":::::::::::::::");
 
-           // if(personal.getNombre()!=null){
-                Intent nextForm= new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(nextForm);
-            //    quoteTextView.setText(personal.getApellidos() + ", "+personal.getNombre());
-            //}else{
-            //    Toast.makeText(getApplicationContext(), "Credenciales incorrectos", Toast.LENGTH_SHORT).show();
-           // }
+            try {
+                RestLogin(usuario);
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "Credenciales incorrectos", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
 
 
         }
@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public String RestLogin(String url, Usuario user){
+    public Boolean RestLogin(Usuario user){
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -105,15 +105,30 @@ public class LoginActivity extends AppCompatActivity {
                 .setPriority(Priority.MEDIUM)
                 .setContentType("application/json")
                 .addJSONObjectBody(jsonObject)
-                //.addPathParameter("usuario","jperez")
-                //.addPathParameter("password","jperez")
                 .build();
         ANResponse<JSONObject> response = request.executeForJSONObject();
         if (response.isSuccess()) {
             JSONObject jsonObjectResult = response.getResult();
+
             Log.d(TAG, "response : " + jsonObjectResult.toString());
             Response okHttpResponse = response.getOkHttpResponse();
             Log.d(TAG, "headers : " + okHttpResponse.headers().toString());
+
+            try {
+                nombre = jsonObjectResult.getJSONObject("response").getString("Nombre").toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+           // quoteTextView.setText(nombre);
+            if(nombre.equals(null) || nombre.equals("null") || nombre.equals("") ){
+                dValidator=false;
+                Toast.makeText(getApplicationContext(), "Credenciales incorrectos", Toast.LENGTH_SHORT).show();
+            }else{
+                dValidator=true;
+                Intent nextForm= new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(nextForm);
+             }
+
         } else {
             ANError error = response.getError();
             // Handle Error
@@ -130,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });*/
 
-        return null;
+        return dValidator;
     }
 
 }
