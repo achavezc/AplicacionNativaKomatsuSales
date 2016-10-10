@@ -2,6 +2,7 @@ package upc.edu.pe.app_komatsusales.activities;
 
 
 import android.database.Cursor;
+import android.os.StrictMode;
 import android.support.v4.app.LoaderManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
@@ -27,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import okhttp3.Response;
 import upc.edu.pe.app_komatsusales.R;
 import upc.edu.pe.app_komatsusales.model.Personal;
 import upc.edu.pe.app_komatsusales.model.Usuario;
@@ -34,6 +38,7 @@ import upc.edu.pe.app_komatsusales.model.Usuario;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG = "";
     private static String LOGIN_URL = "http://52.88.24.228/ServiciosKomatsuSales/Service1.svc/Login";
 
     Util util = new Util();
@@ -46,6 +51,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // setting default screen to login.xml
         setContentView(R.layout.activity_login);
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
 
         btnLogin  = (Button) findViewById(R.id.btnLogin);
@@ -92,13 +101,24 @@ public class LoginActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        AndroidNetworking.post("http://52.88.24.228/ServiciosKomatsuSales/Service1.svc/login/")
+        ANRequest request = AndroidNetworking.post("http://52.88.24.228/ServiciosKomatsuSales/Service1.svc/login/")
                 .setPriority(Priority.MEDIUM)
                 .setContentType("application/json")
                 .addJSONObjectBody(jsonObject)
                 //.addPathParameter("usuario","jperez")
                 //.addPathParameter("password","jperez")
-                .build()
+                .build();
+        ANResponse<JSONObject> response = request.executeForJSONObject();
+        if (response.isSuccess()) {
+            JSONObject jsonObjectResult = response.getResult();
+            Log.d(TAG, "response : " + jsonObjectResult.toString());
+            Response okHttpResponse = response.getOkHttpResponse();
+            Log.d(TAG, "headers : " + okHttpResponse.headers().toString());
+        } else {
+            ANError error = response.getError();
+            // Handle Error
+        }
+                /*
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -108,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onError(ANError error) {
                         // handle error
                     }
-                });
+                });*/
 
         return null;
     }
