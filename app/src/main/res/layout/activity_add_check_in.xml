@@ -39,7 +39,7 @@
             android:text="Bandeja de Cotizaciones"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:id="@+id/button3" />
+            android:id="@+id/btnCotizaciones" />
 
         <Button
             android:text=" Generar Cotización"

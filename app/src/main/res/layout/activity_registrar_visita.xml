@@ -20,43 +20,68 @@
         android:layout_alignParentStart="true"
         app:srcCompat="@drawable/logo_km" />
 
-    <TextView android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#372c24"
-        android:text="Cliente(*)"/>
 
-    <EditText android:id="@+id/txtRazonSocialCliente"
-        android:layout_width="292dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dip"
-        android:layout_marginBottom="20dip"
-        android:ems="10"/>
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="187dp"
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnBuscarCliente"
-        tools:style="@style/Widget.AppCompat.Button.Small"
-        style="@style/Widget.AppCompat.Button"
-        android:background="@drawable/places_ic_search" />
+        android:rowCount="4"
+        android:columnCount="3">
+        <TextView android:layout_width="93dp"
+            android:layout_height="wrap_content"
+            android:textColor="#372c24"
+            android:text="Cliente(*)"/>
 
-    <TextView android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#372c24"
-        android:text="RUC(*)"/>
+        <EditText android:id="@+id/txtRazonSocialCliente"
+            android:layout_width="200dp"
+            android:layout_marginTop="5dip"
+            android:ems="10"/>
 
-    <EditText android:id="@+id/txtRucCliente"
-        android:layout_width="277dp"
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnBuscarCliente"
+            tools:style="@style/Widget.AppCompat.Button.Small"
+            style="@style/Widget.AppCompat.Button"
+            android:background="@drawable/places_ic_search" />
+
+        <TextView
+            android:layout_width="93dp"
+            android:layout_height="wrap_content"
+            android:textColor="#372c24"
+            android:text="RUC(*)"/>
+
+        <EditText android:id="@+id/txtRucCliente"
+            android:layout_width="200dp"
+            android:layout_marginTop="5dip"
+            android:ems="10"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnBuscarRUC"
+            tools:style="@style/Widget.AppCompat.Button.Small"
+            style="@style/Widget.AppCompat.Button"
+            android:background="@drawable/places_ic_search" />
+
+        <TextView
+            android:layout_width="93dp"
+            android:layout_height="wrap_content"
+            android:textColor="#372c24"
+            android:text="Comentarios"/>
+
+        <EditText android:id="@+id/txtComentario"
+            android:layout_width="234dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:ems="10"/>
+
+    </GridLayout>
+
+    <TextView
+        android:id="@+id/Direccion"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dip"
-        android:ems="10"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnBuscarRUC"
-        tools:style="@style/Widget.AppCompat.Button.Small"
-        style="@style/Widget.AppCompat.Button"
-        android:background="@drawable/places_ic_search" />
+        android:textColor="#372c24" />
 
     <Button android:id="@+id/btnRegistrarVisita"
         android:layout_width="fill_parent"
